@@ -44,15 +44,16 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #333;
+    border: 1px solid var(--dark-color);
     border-radius: 5px;
     margin: 1px;
-    background-color: white;
+    background-color: var(--light-color);
     font-size: 20px;
     cursor: pointer;
 }
 
-.cell:hover{
+.cell:hover,
+.cell:active{
     background-color: #999;
 }
 
