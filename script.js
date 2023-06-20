@@ -6,14 +6,22 @@
 
 let grid = document.getElementById("grid")
 let cells = []
+let flagMode = false
+let isGameStarted = false
+let timer = 0
+let timerInterval = setInterval(increaseTimer, 1000)
 
 let flagButton = document.getElementById("flag")
 let restartButton = document.getElementById("restart")
 let themeButton = document.getElementById("theme")
+let timerElement = document.getElementById("timer")
+
+// #######################
+// # Constantes globales #
+// #######################
 
 const bombImage = '💣'
 const flagImage = '🚩'
-let flagMode = false
 
 // ######################
 // # Fonctions globales #
@@ -27,7 +35,17 @@ let flagMode = false
 function createGrid() {
     for (let i = 0 ; i < 100 ; i++) {
         let cell = document.createElement("div")
+        // On ajoute un écouteur d'événement sur la cellule
         cell.onclick = cellClick.bind(this, cell)
+        // On ajoute un écouteur d'événement sur le clic droit
+        cell.oncontextmenu = () => {
+            if (!cell.classList.contains("green") && cell.innerHTML != flagImage)
+                cell.innerHTML = flagImage
+            else if (cell.innerHTML == flagImage)
+                cell.innerHTML = ""
+            // On empêche le menu contextuel de s'afficher
+            return false
+        }
         cell.classList.add("cell")
         grid.appendChild(cell)
         cells.push(cell)
@@ -56,8 +74,18 @@ function setBombs() {
  * @returns {void}
  */
 function cellClick(cell) {
-    if (flagMode && !cell.classList.contains("green"))
+
+    if (!isGameStarted)
+        isGameStarted = true
+
+    // Si la cellule contient un drapeau, on ne fait rien
+    if (cell.innerHTML == flagImage && !flagMode)
+        return
+
+    if (flagMode && !cell.classList.contains("green") && cell.innerHTML != flagImage)
         cell.innerHTML = flagImage
+    else if (flagMode && cell.innerHTML == flagImage)
+        cell.innerHTML = ""
     else {
         if (cell.classList.contains("bomb"))
             gameOver()
@@ -132,6 +160,18 @@ function showEmptyCells(cell) {
 }
 
 /**
+ * Incrémente le timer
+ * 
+ * @returns {void}
+ */
+function increaseTimer() {
+    if (isGameStarted) {
+        timer++
+        timerElement.innerHTML = timer
+    }
+}
+
+/**
  * Défaite du joueur
  * 
  * @returns {void}
@@ -144,6 +184,8 @@ function gameOver() {
             cell.innerHTML = bombImage
         }
     })
+
+    isGameStarted = false
 
     alert("Game over !")
 
@@ -171,7 +213,7 @@ function startGame() {
         })
 
         if (win) {
-            alert("You win !")
+            alert("You win !\nYour time : " + timer + " seconds")
             cells.forEach(cell => {
                 cell.onclick = null
             })
@@ -208,6 +250,10 @@ function restartGame() {
         cell.remove()
     })
     cells = []
+
+    isGameStarted = false
+    timer = 0
+    timerElement.innerHTML = timer
 
     // On recrée la grille
     createGrid()

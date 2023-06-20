@@ -17,7 +17,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 50px;
+    gap: 25px;
     height: 100vh;
     background: #f2f2f2;
     transition: 0.24s;
@@ -36,14 +36,18 @@ h1{
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
-    height: 300px;
-    width: 300px;
-    background-color: white;
+    height: 400px;
+    width: 400px;
 }
 
 .cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid #333;
-    text-align: center;
+    border-radius: 5px;
+    margin: 1px;
+    background-color: white;
     font-size: 20px;
     cursor: pointer;
 }
@@ -73,4 +77,17 @@ button{
     height: 50px;
     cursor: pointer;
     font-size: larger;
+}
+
+.little{
+    width: 50px;
+    height: 50px;
+    font-size: larger;
+}
+
+@media screen and (max-width: 500px) {    
+    #grid{
+        width: 300px;
+        height: 300px;
+    }
 }
