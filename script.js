@@ -213,7 +213,10 @@ function startGame() {
         })
 
         if (win) {
-            alert("You win !\nYour time : " + timer + " seconds")
+            alert(
+                "You win !\n" +
+                "Your time : " + Math.floor(timer / 60) % 60 + "min " + timer % 60 + "s"
+                )
             cells.forEach(cell => {
                 cell.onclick = null
             })
