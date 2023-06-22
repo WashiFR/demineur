@@ -227,7 +227,13 @@ function showEmptyCells(i, j) {
 function increaseTimer() {
     if (gameStarted) {
         timer++
-        timerElement.innerHTML = timer
+        let minutes = Math.floor(timer / 60) % 60
+        let seconds = timer % 60
+        timerElement.innerHTML = minutes + ":" + seconds 
+        if (minutes < 10)
+            timerElement.innerHTML = "0" + timerElement.innerHTML
+        if (seconds < 10)
+            timerElement.innerHTML = timerElement.innerHTML.substring(0, 3) + "0" + timerElement.innerHTML.substring(3)
     }
 }
 
@@ -276,7 +282,7 @@ function startGame() {
             alert(
                 "You win !\n" +
                 "Difficulty : " + difficultyLevel + "\n" +
-                "Your time : " + Math.floor(timer / 60) % 60 + "min " + timer % 60 + "s"
+                "Your time : " + timerElement.innerHTML
                 )
             gameStarted = false
 
