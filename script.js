@@ -35,7 +35,7 @@ const flagImage = '🚩'
 
 const difficulty = {
     easy: {
-        numberOfBombs: 5,
+        numberOfBombs: 10,
         numberOfRows: 9,
         numberOfColumns: 9
     },
@@ -274,8 +274,8 @@ function startGame() {
         let greenCells = document.getElementsByClassName("green")
         if (greenCells.length == numberOfCells - difficulty[difficultyLevel].numberOfBombs) {
             alert(
-                "You win !\n",
-                "Difficulty : " + difficultyLevel + "\n",
+                "You win !\n" +
+                "Difficulty : " + difficultyLevel + "\n" +
                 "Your time : " + Math.floor(timer / 60) % 60 + "min " + timer % 60 + "s"
                 )
             gameStarted = false
