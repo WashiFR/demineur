@@ -81,6 +81,8 @@ function setGameSize(diff = "easy") {
     else {
         grid.style.gridTemplateColumns = "repeat(" + numberOfRows + ", 1fr)"
         grid.style.gridTemplateRows = "repeat(" + numberOfColumns + ", 1fr)"
+        numberOfColumns = difficulty[diff].numberOfRows
+        numberOfRows = difficulty[diff].numberOfColumns
     }
 }
 
