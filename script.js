@@ -20,6 +20,7 @@ let numberOfCells = 0
 let difficultyLevel = "easy"
 
 let cellSize = 0
+let totalCellSize = 0
 
 // ####################### Constantes globales #######################
 
@@ -37,17 +38,20 @@ const difficulty = {
     easy: {
         numberOfBombs: 10,
         numberOfRows: 9,
-        numberOfColumns: 9
+        numberOfColumns: 9,
+        cellSize: 30
     },
     medium: {
         numberOfBombs: 40,
         numberOfRows: 16,
-        numberOfColumns: 16
+        numberOfColumns: 16,
+        cellSize: 20
     },
     hard: {
         numberOfBombs: 99,
         numberOfRows: 16,
-        numberOfColumns: 30
+        numberOfColumns: 30,
+        cellSize: 20
     }
 }
 
@@ -66,7 +70,11 @@ function setGameSize(diff = "easy") {
     numberOfColumns = difficulty[diff].numberOfColumns
     numberOfCells = numberOfRows * numberOfColumns
 
-    if (window.innerWidth > window.innerHeight) {
+    cellSize = difficulty[diff].cellSize
+
+    totalCellSize = numberOfColumns * cellSize
+
+    if (totalCellSize < window.innerWidth - 20 && numberOfColumns != numberOfRows) {
         grid.style.gridTemplateColumns = "repeat(" + numberOfColumns + ", 1fr)"
         grid.style.gridTemplateRows = "repeat(" + numberOfRows + ", 1fr)"
     }
@@ -89,20 +97,25 @@ function createGrid() {
             // Création de la cellule
             let cell = document.createElement("div")
             cell.classList.add("cell")
+            cell.style.width = cellSize + "px"
+            cell.style.height = cellSize + "px"
 
             // Ajout des écouteurs d'événements
             cell.onclick = () => cellClick(i, j)
             
             cell.oncontextmenu = () => {
-                if (!cell.classList.contains("green") && cell.innerHTML != flagImage) {
-                    cell.innerHTML = flagImage
-                    numberOfBombs--
-                    bombsElement.innerHTML = numberOfBombs
-                }
-                else if (cell.innerHTML == flagImage) {
-                    cell.innerHTML = ""
-                    numberOfBombs++
-                    bombsElement.innerHTML = numberOfBombs
+                if (gameStarted) {
+                    if (!cell.classList.contains("green") && cell.innerHTML != flagImage) {
+                        cell.innerHTML = flagImage
+                        numberOfBombs--
+                        bombsElement.innerHTML = numberOfBombs
+                    }
+                    else if (cell.innerHTML == flagImage) {
+                        cell.innerHTML = ""
+                        numberOfBombs++
+                        bombsElement.innerHTML = numberOfBombs
+                    }
+                    cell.classList.toggle("orange")
                 }
                 // On empêche le menu contextuel de s'afficher
                 return false
@@ -149,15 +162,18 @@ function cellClick(i, j) {
     if (cells[i][j].innerHTML == flagImage && !flagMode)
         return
 
-    if (flagMode && !cells[i][j].classList.contains("green") && cells[i][j].innerHTML != flagImage) {
-        cells[i][j].innerHTML = flagImage
-        numberOfBombs--
-        bombsElement.innerHTML = numberOfBombs
-    }
-    else if (flagMode && cells[i][j].innerHTML == flagImage) {
-        cells[i][j].innerHTML = ""
-        numberOfBombs++
-        bombsElement.innerHTML = numberOfBombs
+    if (flagMode) {
+        if (!cells[i][j].classList.contains("green") && cells[i][j].innerHTML != flagImage) {
+            cells[i][j].innerHTML = flagImage
+            numberOfBombs--
+            bombsElement.innerHTML = numberOfBombs
+        }
+        else if (cells[i][j].innerHTML == flagImage) {
+            cells[i][j].innerHTML = ""
+            numberOfBombs++
+            bombsElement.innerHTML = numberOfBombs
+        }
+        cells[i][j].classList.toggle("orange")
     }
     else {
         if (cells[i][j].classList.contains("bomb"))
@@ -249,6 +265,7 @@ function gameOver() {
             if (cell.classList.contains("bomb")) {
                 cell.innerHTML = bombImage
                 cell.classList.add("red")
+                cell.classList.remove("orange")
             }
         })
     })
@@ -259,8 +276,6 @@ function gameOver() {
             cell.onclick = null
         })
     })
-
-    alert("Game over !")
 
     gameStarted = false
 }
@@ -326,7 +341,7 @@ function restartGame() {
 
     gameStarted = false
     timer = 0
-    timerElement.innerHTML = timer
+    timerElement.innerHTML = "00:00"
 
     setGameSize(difficultyLevel)
 

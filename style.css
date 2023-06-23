@@ -28,10 +28,6 @@ body{
     color: var(--light-color);
 }
 
-h1{
-    font-size: 40px;
-}
-
 #infos{
     display: flex;
     justify-content: center;
@@ -52,8 +48,6 @@ h1{
     margin: 1px;
     background-color: var(--light-color);
     cursor: pointer;
-    width: 20px;
-    height: 20px;
     font-size: 15px;
 }
 
@@ -68,6 +62,10 @@ h1{
 
 .green{
     background-color: green;
+}
+
+.orange{
+    background-color: orange;
 }
 
 #buttons{
